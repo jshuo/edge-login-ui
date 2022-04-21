@@ -13,6 +13,54 @@ const asFunction: Cleaner<Function> = raw => {
   throw new TypeError()
 }
 
+const asThemeShadowParams = asObject({
+  shadowColor: asString,
+  shadowOffset: asObject({
+    width: asNumber,
+    height: asNumber
+  }),
+  shadowOpacity: asNumber,
+  shadowRadius: asNumber,
+  elevation: asNumber
+})
+type ThemeShadowParams = ReturnType<typeof asThemeShadowParams>
+
+const asTextShadowParams = asObject({
+  textShadowColor: asString,
+  textShadowOffset: asObject({
+    width: asNumber,
+    height: asNumber
+  }),
+  textShadowRadius: asNumber
+})
+type TextShadowParams = ReturnType<typeof asTextShadowParams>
+
+const asGradientCoords = asObject({
+  x: asNumber,
+  y: asNumber
+})
+type GradientCoords = ReturnType<typeof asGradientCoords>
+
+export const themeNoShadow: ThemeShadowParams = {
+  shadowColor: '#000000',
+  shadowOffset: {
+    width: 0,
+    height: 0
+  },
+  shadowOpacity: 0,
+  shadowRadius: 0,
+  elevation: 0
+}
+
+export const textNoShadow: TextShadowParams = {
+  textShadowColor: '#000000',
+  textShadowOffset: {
+    width: 0,
+    height: 0
+  },
+  textShadowRadius: 0
+}
+
 export const asOptionalTheme = asObject({
   // The app scaling factor, which is the height of "normal" text:
   rem: asOptional(asFunction),
@@ -40,7 +88,7 @@ export const asOptionalTheme = asObject({
   iconTappable: asOptional(asString),
 
   // Background colors:
-  backgroundGradientColors: asArray(asString),
+  backgroundGradientColors: asOptional(asArray(asString)),
 
   // Modal:
   modal: asOptional(asString),
@@ -57,14 +105,35 @@ export const asOptionalTheme = asObject({
   // Tile:
   tileBackground: asOptional(asString),
 
-  // Button colors:
+  // Buttons
+  buttonBorderRadiusRem: asOptional(asNumber),
+
   primaryButtonOutline: asOptional(asString),
-  // primaryButton: asOptional(asString),
+  primaryButtonOutlineWidth: asOptional(asNumber),
+  primaryButton: asOptional(asArray(asString)),
+  primaryButtonColorStart: asOptional(asGradientCoords),
+  primaryButtonColorEnd: asOptional(asGradientCoords),
   primaryButtonText: asOptional(asString),
+  primaryButtonTextShadow: asOptional(asTextShadowParams),
+  primaryButtonShadow: asOptional(asThemeShadowParams),
 
   secondaryButtonOutline: asOptional(asString),
-  // secondaryButton: asOptional(asString),
+  secondaryButtonOutlineWidth: asOptional(asNumber),
+  secondaryButton: asOptional(asArray(asString)),
+  secondaryButtonColorStart: asOptional(asGradientCoords),
+  secondaryButtonColorEnd: asOptional(asGradientCoords),
   secondaryButtonText: asOptional(asString),
+  secondaryButtonTextShadow: asOptional(asTextShadowParams),
+  secondaryButtonShadow: asOptional(asThemeShadowParams),
+
+  escapeButtonOutline: asOptional(asString),
+  escapeButtonOutlineWidth: asOptional(asNumber),
+  escapeButton: asOptional(asArray(asString)),
+  escapeButtonColorStart: asOptional(asGradientCoords),
+  escapeButtonColorEnd: asOptional(asGradientCoords),
+  escapeButtonText: asOptional(asString),
+  escapeButtonTextShadow: asOptional(asTextShadowParams),
+  escapeButtonShadow: asOptional(asThemeShadowParams),
 
   alertModalPrimaryButtonOutline: asOptional(asString),
   alertModalPrimaryButton: asOptional(asString),
@@ -142,14 +211,35 @@ export interface Theme {
   // Tile:
   tileBackground: string
 
-  // Button colors:
+  // Buttons
+  buttonBorderRadiusRem: number
+
   primaryButtonOutline: string
-  primaryButton: string
+  primaryButtonOutlineWidth: number
+  primaryButton: string[]
+  primaryButtonColorStart: GradientCoords
+  primaryButtonColorEnd: GradientCoords
   primaryButtonText: string
+  primaryButtonTextShadow: TextShadowParams
+  primaryButtonShadow: ThemeShadowParams
 
   secondaryButtonOutline: string
-  secondaryButton: string
+  secondaryButtonOutlineWidth: number
+  secondaryButton: string[]
+  secondaryButtonColorStart: GradientCoords
+  secondaryButtonColorEnd: GradientCoords
   secondaryButtonText: string
+  secondaryButtonTextShadow: TextShadowParams
+  secondaryButtonShadow: ThemeShadowParams
+
+  escapeButtonOutline: string
+  escapeButtonOutlineWidth: number
+  escapeButton: string[]
+  escapeButtonColorStart: GradientCoords
+  escapeButtonColorEnd: GradientCoords
+  escapeButtonText: string
+  escapeButtonTextShadow: TextShadowParams
+  escapeButtonShadow: ThemeShadowParams
 
   alertModalPrimaryButtonOutline: string
   alertModalPrimaryButton: string
