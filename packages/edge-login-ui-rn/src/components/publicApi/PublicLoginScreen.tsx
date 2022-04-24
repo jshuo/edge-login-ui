@@ -5,9 +5,10 @@ import { initializeLogin } from '../../actions/LoginInitActions'
 import { updateFontStyles } from '../../constants/Fonts'
 import { ParentButton } from '../../types/Branding'
 import { OnLogin } from '../../types/ReduxTypes'
+import { asOptionalTheme, OptionalTheme, Theme } from '../../types/Theme'
 import { Router } from '../navigation/Router'
 import { ReduxStore } from '../services/ReduxStore'
-import { changeFont } from '../services/ThemeContext'
+import { changeFont, changeTheme, getTheme } from '../services/ThemeContext'
 
 interface Props {
   context: EdgeContext
@@ -42,6 +43,8 @@ interface Props {
   // The username to select, if present on the device:
   username?: string
 
+  optionalTheme?: OptionalTheme
+
   // Call that overwrites the internal checkAndRequestNotifications function. Executed on Login initialization:
   customPermissionsFunction?: () => void
 }
@@ -55,6 +58,24 @@ export function LoginScreen(props: Props): JSX.Element {
 
   // Always update legacy fonts:
   updateFontStyles(regularFontFamily, headingFontFamily)
+
+  if (props.optionalTheme != null) {
+    // Error check the theme but don't use the return value as the cleaner sets missing parameters
+    // to undefined which stomps on top of the oldTheme
+    asOptionalTheme(props.optionalTheme)
+
+    const optionalTheme = props.optionalTheme
+    const oldTheme = getTheme()
+    const tsHackTheme: any = { ...oldTheme, ...optionalTheme }
+    const newTheme: Theme = tsHackTheme
+
+    if (JSON.stringify(oldTheme) !== JSON.stringify(newTheme)) {
+      changeTheme(newTheme)
+    }
+    // console.log(`oldTheme`, JSON.stringify(oldTheme, null, 2))
+    // console.log(`optionalTheme`, JSON.stringify(optionalTheme, null, 2))
+    // console.log(`newTheme`, JSON.stringify(newTheme, null, 2))
+  }
 
   // Update theme fonts if they are different:
   React.useEffect(() => changeFont(regularFontFamily, headingFontFamily), [
