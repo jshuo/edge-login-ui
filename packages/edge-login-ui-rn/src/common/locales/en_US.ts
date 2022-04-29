@@ -160,7 +160,7 @@ export default {
   login_with_password: 'Login with password',
   landing_tagline:
     'The secure and easy to use wallet for your blockchain assets and tokens',
-  landing_create_account_button: 'Create account',
+  landing_create_account_button: 'Connect Secux',
   landing_already_have_account: 'Already have an account? Sign in',
   pin_not_enabled: 'PIN is not enabled for this account',
   invalid_pin: 'Invalid PIN',
